@@ -1,60 +1,19 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vòng Quay May Mắn</title>
+    <title>Vòng Quay Đơn Giản</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            margin: 0;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        
-        h1 {
-            color: #e74c3c;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            font-size: 2.5rem;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 800px;
-            width: 100%;
-        }
-        
-        .wheel-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            margin-bottom: 40px;
-        }
-        
-        .wheel {
-            width: 100%;
-            height: 100%;
+        body { font-family: Arial; text-align: center; }
+        #wheel {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            border: 15px solid #2c3e50;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2), 
-                        inset 0 0 20px rgba(0, 0, 0, 0.3);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            transform: rotate(0deg);
-            background-color: #fff;
+            margin: 30px auto;
+            border: 10px solid #333;
         }
-        
-        .wheel-item {
+        .item {
             position: absolute;
             width: 50%;
             height: 50%;
@@ -62,199 +21,88 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
             color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            font-size: 1.1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-sizing: border-box;
+            font-weight: bold;
         }
-        
+        #spin {
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         .pointer {
             position: absolute;
-            top: -30px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid #e74c3c;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid red;
             z-index: 10;
-            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
-        }
-        
-        .pointer::after {
-            content: '';
-            position: absolute;
-            top: -45px;
-            left: -10px;
-            width: 20px;
-            height: 20px;
-            background-color: #fff;
-            border-radius: 50%;
-            border: 3px solid #e74c3c;
-        }
-        
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-        }
-        
-        .spin-btn {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .spin-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .spin-btn:active {
-            transform: translateY(1px);
-        }
-        
-        .spin-btn:disabled {
-            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .spin-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(30deg);
-            transition: all 0.3s;
-        }
-        
-        .spin-btn:hover::after {
-            left: 100%;
-        }
-        
-        .result {
-            margin-top: 30px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #e74c3c;
-            height: 50px;
-            text-align: center;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 10px 30px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.5s;
-            max-width: 80%;
-        }
-        
-        .result.show {
-            opacity: 1;
-        }
-        
-        .wheel-center {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: #2c3e50;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5;
-            border: 5px solid #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .wheel-center::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: #e74c3c;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 3px solid #fff;
-        }
-        
-        @media (max-width: 500px) {
-            .wheel-container {
-                width: 300px;
-                height: 300px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .wheel-item {
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>VÒNG QUAY MAY MẮN</h1>
-        
-        <div class="wheel-container">
-            <div class="pointer"></div>
-            <div class="wheel" id="wheel"></div>
-            <div class="wheel-center"></div>
-        </div>
-        
-        <div class="controls">
-            <button class="spin-btn" id="spinBtn">QUAY NGAY</button>
-        </div>
-        
-        <div class="result" id="result"></div>
+    <h1>VÒNG QUAY MAY MẮN</h1>
+    
+    <div style="position: relative; width: 300px; margin: 0 auto;">
+        <div class="pointer"></div>
+        <div id="wheel"></div>
     </div>
     
+    <button id="spin">QUAY NGAY</button>
+    <p id="result"></p>
+
     <script>
-        // Danh sách các phần thưởng và màu sắc tương ứng
-        const items = [
-            { text: "IPHONE 15", color: "#e74c3c" },
+        const prizes = [
+            { text: "IPHONE", color: "#e74c3c" },
             { text: "10 TRIỆU", color: "#3498db" },
             { text: "XE MÁY", color: "#2ecc71" },
             { text: "1 TRIỆU", color: "#f39c12" },
             { text: "LAPTOP", color: "#9b59b6" },
-            { text: "5 TRIỆU", color: "#1abc9c" },
-            { text: "TV 4K", color: "#d35400" },
-            { text: "2 TRIỆU", color: "#34495e" }
+            { text: "5 TRIỆU", color: "#1abc9c" }
         ];
-        
+
         const wheel = document.getElementById('wheel');
-        const spinBtn = document.getElementById('spinBtn');
-        const resultDisplay = document.getElementById('result');
-        
-        let isSpinning = false;
-        let currentRotation = 0;
-        
+        const spinBtn = document.getElementById('spin');
+        const result = document.getElementById('result');
+
         // Tạo vòng quay
         function createWheel() {
-            wheel.innerHTML = '';
-            const itemCount = items
+            const sectorAngle = 360 / prizes.length;
+            
+            prizes.forEach((prize, index) => {
+                const sector = document.createElement('div');
+                sector.className = 'item';
+                sector.textContent = prize.text;
+                sector.style.backgroundColor = prize.color;
+                sector.style.transform = `rotate(${index * sectorAngle}deg) skewY(${90 - sectorAngle}deg)`;
+                sector.style.transform += ` skewY(${sectorAngle - 90}deg) rotate(${sectorAngle/2}deg)`;
+                wheel.appendChild(sector);
+            });
+        }
+
+        // Quay vòng quay
+        spinBtn.addEventListener('click', function() {
+            if (wheel.style.transform.includes('rotate')) return;
+            
+            const randomPrize = Math.floor(Math.random() * prizes.length);
+            const spinDegrees = 1800 + (360 / prizes.length) * randomPrize;
+            
+            wheel.style.transform = `rotate(-${spinDegrees}deg)`;
+            wheel.style.transition = 'transform 3s ease-out';
+            
+            setTimeout(() => {
+                result.textContent = `Chúc mừng bạn nhận được ${prizes[randomPrize].text}!`;
+            }, 3000);
+        });
+
+        createWheel();
+    </script>
+</body>
+</html>
